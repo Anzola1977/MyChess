@@ -12,9 +12,9 @@ public class ChessBoard {
 
     public boolean moveToPosition(int startLine, int startColumn, int endLine, int endColumn) {
         if (checkPos(startLine) && checkPos(startColumn)) { //проверяем есть ли такие места на доске
-//проверяем если цвет текущего игрока не совпадает с цветом фигуры на указанной клетке, то ходить ею нельзя
+            //проверяем если цвет текущего игрока не совпадает с цветом фигуры на указанной клетке, то ходить ею нельзя
             if (!nowPlayer.equals(board[startLine][startColumn].getColor())) return false;
-//если данная фигура может быть сдвинута на эту позицию
+            //если данная фигура может быть сдвинута на эту позицию
             if (board[startLine][startColumn].canMoveToPosition(this, startLine, startColumn, endLine, endColumn)) {
                 //проверяем позицию для рокировки
                 //если фигура - это король или ладья
@@ -40,7 +40,7 @@ public class ChessBoard {
         System.out.println("Player 2(Black)");
         System.out.println();
         System.out.println("\t0\t1\t2\t3\t4\t5\t6\t7");
-// пробегается по массиву доски и если там стоит null, то пустое поле или поле, занятое фигурой в зависимости от цвета и символа
+        // пробегается по массиву доски и если там стоит null, то пустое поле или поле, занятое фигурой в зависимости от цвета и символа
         for (int i = 7; i > -1; i--) {
             System.out.print(i + "\t");
             for (int j = 0; j < 8; j++) {
@@ -58,5 +58,81 @@ public class ChessBoard {
 
     public boolean checkPos(int pos) {
         return pos >= 0 && pos <= 7;
+    }
+
+    public boolean castling0() {
+        if (nowPlayer.equals("White")) {
+            if (board[0][0] == null || board[0][4] == null) return false;
+            if (board[0][0].getSymbol().equals("R") && board[0][4].getSymbol().equals("K") && // check that King and Rook
+                    board[0][1] == null && board[0][2] == null && board[0][3] == null) {              // never moved
+                if (board[0][0].getColor().equals("White") && board[0][4].getColor().equals("White") &&
+                        board[0][0].check && board[0][4].check &&
+                        !new King("White").isUnderAttack(this, 0, 2)) { // check that position not in under attack
+                    board[0][4] = null;
+                    board[0][1] = new King("White");   // move King
+                    board[0][1].check = false;
+                    board[0][0] = null;
+                    board[0][2] = new Rook("White");   // move Rook
+                    board[0][2].check = false;
+                    nowPlayer = "Black";  // next turn
+                    return true;
+                } else return false;
+            } else return false;
+        } else {
+            if (board[7][0] == null || board[7][4] == null) return false;
+            if (board[7][0].getSymbol().equals("R") && board[7][4].getSymbol().equals("K") && // check that King and Rook
+                    board[7][1] == null && board[7][2] == null && board[7][3] == null) {              // never moved
+                if (board[7][0].getColor().equals("Black") && board[7][4].getColor().equals("Black") &&
+                        board[7][0].check && board[7][4].check &&
+                        !new King("Black").isUnderAttack(this, 7, 2)) { // check that position not in under attack
+                    board[7][4] = null;
+                    board[7][1] = new King("Black");   // move King
+                    board[7][1].check = false;
+                    board[7][0] = null;
+                    board[7][2] = new Rook("Black");   // move Rook
+                    board[7][2].check = false;
+                    nowPlayer = "White";  // next turn
+                    return true;
+                } else return false;
+            } else return false;
+        }
+    }
+
+    public boolean castling7() {
+        if (nowPlayer.equals("White")) {
+            if (board[0][7] == null || board[0][4] == null) return false;
+            if (board[0][7].getSymbol().equals("R") && board[0][4].getSymbol().equals("K") && // check that King and Rook
+                    board[0][6] == null && board[0][5] == null) {                             // never moved
+                if (board[0][7].getColor().equals("White") && board[0][4].getColor().equals("White") &&
+                        board[0][7].check && board[0][4].check &&
+                        !new King("White").isUnderAttack(this, 0, 6)) { // check that position nit in under attack
+                    board[0][4] = null;
+                    board[0][6] = new King("White");   // move King
+                    board[0][6].check = false;
+                    board[0][7] = null;
+                    board[0][5] = new Rook("White");   // move Rook
+                    board[0][5].check = false;
+                    nowPlayer = "Black";  // next turn
+                    return true;
+                } else return false;
+            } else return false;
+        } else {
+            if (board[7][7] == null || board[7][4] == null) return false;
+            if (board[7][7].getSymbol().equals("R") && board[7][4].getSymbol().equals("K") && // check that King and Rook
+                    board[7][6] == null && board[7][5] == null) {                             // never moved
+                if (board[7][7].getColor().equals("Black") && board[7][4].getColor().equals("Black") &&
+                        board[7][7].check && board[7][4].check &&
+                        !new King("Black").isUnderAttack(this, 7, 6)) { // check that position not in under attack
+                    board[7][4] = null;
+                    board[7][6] = new King("Black");   // move King
+                    board[7][6].check = false;
+                    board[7][7] = null;
+                    board[7][5] = new Rook("Black");   // move Rook
+                    board[7][5].check = false;
+                    nowPlayer = "White";  // next turn
+                    return true;
+                } else return false;
+            } else return false;
+        }
     }
 }

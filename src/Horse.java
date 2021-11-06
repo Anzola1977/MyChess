@@ -16,9 +16,9 @@ public class Horse extends ChessPiece {
             //проверяем, что стартовая координата не равна конечной
             if (line != toLine && column != toColumn &&
                     //и конечная клетка пустая
-            (chessBoard.board[toLine][toColumn] == null ||
-                    //или цвет фигуры в конечной клетке не равен цвету текущего (игрока)
-            !chessBoard.board[toLine][toColumn].color.equals(this.color)) &&
+                    (chessBoard.board[toLine][toColumn] == null ||
+                            //или цвет фигуры в конечной клетке не равен цвету текущего (игрока)
+                            !chessBoard.board[toLine][toColumn].color.equals(this.color)) &&
                     // и стартовая клетка не пустая
                     chessBoard.board[line][column] != null) {
                 // если стартовая клетка не равна коню, то не ходим
@@ -45,10 +45,5 @@ public class Horse extends ChessPiece {
     @Override
     public String getSymbol() {
         return "H";
-    }
-
-    public boolean checkPos(int pos) {   // check that our position is correct
-        if (pos >= 0 && pos <= 7) return true;
-        else return false;
     }
 }
